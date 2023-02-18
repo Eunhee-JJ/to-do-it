@@ -1,17 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:todoit/screens/login/login.dart';
+import 'package:todoit/screens/personal/personal.dart';
 
 void main() {
-  runApp(const ToDoIt());
+  runApp(const MyApp());
 }
 
-class ToDoIt extends StatelessWidget {
-  const ToDoIt({super.key});
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
 
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'To Do It',
       theme: ThemeData(
         // This is the theme of your application.
         //
@@ -24,7 +26,10 @@ class ToDoIt extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      routes: {
+        '/': (context) => const LoginScreen(),
+        '/personal': (context) => const PersonalScreen(),
+      },
     );
   }
 }
