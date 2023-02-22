@@ -21,10 +21,10 @@ class _PersonalScreenState extends State<PersonalScreen> {
             child: Column(
           mainAxisAlignment: MainAxisAlignment.end,
           children: <Widget>[
+            // 프로필
             Expanded(
-              flex: 1,
-              child: // 프사 + 캘린더 제목
-                  Row(children: <Widget>[
+              flex: 2,
+              child: Row(children: <Widget>[
                 SizedBox(
                   width: 40,
                 ),
@@ -34,9 +34,6 @@ class _PersonalScreenState extends State<PersonalScreen> {
                 Expanded(child: SizedBox()),
                 Expanded(
                     flex: 2,
-                    //   child: Icon(
-                    // CupertinoIcons.person,
-                    // size: 40,
                     child: CircleAvatar(
                       backgroundImage: AssetImage(user.profileImg),
                       radius: 30,
@@ -48,11 +45,12 @@ class _PersonalScreenState extends State<PersonalScreen> {
             ),
 
             // 캘린더
-            const Expanded(
-              flex: 4,
-              child: PersonalCalendar(),
-            ),
-            // 네비바
+            Expanded(
+                flex: 5,
+                child: Container(
+                  margin: EdgeInsets.all(30),
+                  child: PersonalCalendar(),
+                )),
           ],
         )),
       ),
