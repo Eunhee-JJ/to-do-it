@@ -8,8 +8,9 @@ import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 import 'package:http/http.dart' as http;
 
 class LoginScreen extends StatefulWidget {
+  const LoginScreen({super.key});
   @override
-  _LoginScreenState createState() => _LoginScreenState();
+  State<StatefulWidget> createState() => _LoginScreenState();
 }
 
 class _LoginScreenState extends State<LoginScreen> {
@@ -32,7 +33,7 @@ class _LoginScreenState extends State<LoginScreen> {
       final profileInfo = json.decode(response.body);
       print('카톡 로그인 성공 ${token.accessToken}');
       print(profileInfo.toString());
-      Navigator.pushNamed(context, '/personal');
+      Navigator.pushNamed(context, '/home');
     } catch (error) {
       // 의도적인 로그인 취소로 보고 카카오계정으로 로그인 시도 없이 로그인 취소로 처리 (예: 뒤로 가기)
       if (error is PlatformException && error.code == 'CANCELED') {

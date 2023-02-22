@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:todoit/models/user.dart';
+import 'package:todoit/screens/personal/personal_calendar.dart';
 
 class PersonalScreen extends StatefulWidget {
   const PersonalScreen({super.key});
@@ -9,7 +11,7 @@ class PersonalScreen extends StatefulWidget {
 }
 
 class _PersonalScreenState extends State<PersonalScreen> {
-  String profileImg = '';
+  User user = User();
 
   @override
   Widget build(BuildContext context) {
@@ -31,10 +33,14 @@ class _PersonalScreenState extends State<PersonalScreen> {
                     child: Text("은희님의 투두잇", style: TextStyle(fontSize: 30))),
                 Expanded(child: SizedBox()),
                 Expanded(
-                    child: Icon(
-                  CupertinoIcons.person,
-                  size: 40,
-                )),
+                    flex: 2,
+                    //   child: Icon(
+                    // CupertinoIcons.person,
+                    // size: 40,
+                    child: CircleAvatar(
+                      backgroundImage: AssetImage(user.profileImg),
+                      radius: 30,
+                    )),
                 SizedBox(
                   width: 40,
                 ),
@@ -44,7 +50,7 @@ class _PersonalScreenState extends State<PersonalScreen> {
             // 캘린더
             const Expanded(
               flex: 4,
-              child: Text("캘린더"),
+              child: PersonalCalendar(),
             ),
             // 네비바
           ],

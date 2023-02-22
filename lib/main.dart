@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 import 'package:todoit/screens/login/login_screen.dart';
-import 'package:todoit/screens/personal/personal_screen.dart';
+import 'package:todoit/screens/home_screen.dart';
 
 void main() {
   // 웹 환경에서 카카오 로그인을 정상적으로 완료하려면 runApp() 호출 전 아래 메서드 호출 필요
@@ -26,7 +26,7 @@ class MyApp extends StatelessWidget {
       theme: CupertinoThemeData(brightness: Brightness.light),
       routes: {
         '/': (context) => LoginScreen(),
-        '/personal': (context) => PersonalScreen(),
+        '/home': (context) => HomeScreen(),
       },
     );
   }
