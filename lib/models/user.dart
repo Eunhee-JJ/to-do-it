@@ -1,4 +1,4 @@
 class User {
-  String userName = '';
+  String name = '';
   String profileImg = '';
 }

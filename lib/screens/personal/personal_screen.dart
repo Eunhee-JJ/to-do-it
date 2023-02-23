@@ -21,16 +21,20 @@ class _PersonalScreenState extends State<PersonalScreen> {
             child: Column(
           mainAxisAlignment: MainAxisAlignment.end,
           children: <Widget>[
+            SizedBox(
+              height: 40,
+            ),
             // 프로필
             Expanded(
-              flex: 2,
+              flex: 1,
               child: Row(children: <Widget>[
                 SizedBox(
-                  width: 40,
+                  width: 50,
                 ),
                 Expanded(
                     flex: 8,
-                    child: Text("은희님의 투두잇", style: TextStyle(fontSize: 30))),
+                    child: Text("${user.name}님의 투두잇",
+                        style: TextStyle(fontSize: 30))),
                 Expanded(child: SizedBox()),
                 Expanded(
                     flex: 2,
@@ -46,7 +50,7 @@ class _PersonalScreenState extends State<PersonalScreen> {
 
             // 캘린더
             Expanded(
-                flex: 5,
+                flex: 4,
                 child: Container(
                   margin: EdgeInsets.all(30),
                   child: PersonalCalendar(),

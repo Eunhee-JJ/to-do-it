@@ -10,11 +10,20 @@ class PersonalCalendar extends StatefulWidget {
 }
 
 class _PersonalCalendarSatae extends State<PersonalCalendar> {
+  void onClick() {}
   @override
   Widget build(BuildContext context) {
+    HeaderStyle _headerStyle = new HeaderStyle(
+      formatButtonVisible: false,
+      headerMargin: EdgeInsets.only(bottom: 20),
+      titleTextStyle: TextStyle(fontSize: 25),
+      titleCentered: true,
+    );
     return TableCalendar(
-        focusedDay: DateTime.now(),
-        firstDay: DateTime.utc(2010, 10, 16),
-        lastDay: DateTime.utc(2030, 3, 14));
+      headerStyle: _headerStyle,
+      focusedDay: DateTime.now(),
+      firstDay: DateTime.utc(2010, 10, 16),
+      lastDay: DateTime.utc(2030, 3, 14),
+    );
   }
 }
