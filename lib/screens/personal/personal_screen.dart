@@ -22,7 +22,7 @@ class _PersonalScreenState extends State<PersonalScreen> {
           mainAxisAlignment: MainAxisAlignment.end,
           children: <Widget>[
             SizedBox(
-              height: 40,
+              height: 50,
             ),
             // 프로필
             Expanded(
@@ -50,11 +50,30 @@ class _PersonalScreenState extends State<PersonalScreen> {
 
             // 캘린더
             Expanded(
-                flex: 4,
+                flex: 6,
                 child: Container(
-                  margin: EdgeInsets.all(30),
+                  margin: EdgeInsets.all(37),
                   child: PersonalCalendar(),
+                  // decoration: BoxDecoration(
+                  //   boxShadow: [
+                  //     BoxShadow(
+                  //       color: Colors.grey.withOpacity(0.5),
+                  //     )
+                  //   ],
+                  // ),
                 )),
+
+            Expanded(
+              flex: 1,
+              child: SizedBox(),
+              // decoration: BoxDecoration(
+              //   boxShadow: [
+              //     BoxShadow(
+              //       color: Colors.grey.withOpacity(0.5),
+              //     )
+              //   ],
+              // ),
+            ),
           ],
         )),
       ),
