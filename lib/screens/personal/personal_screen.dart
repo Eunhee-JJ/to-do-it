@@ -50,7 +50,7 @@ class _PersonalScreenState extends State<PersonalScreen> {
 
             // 캘린더
             Expanded(
-                flex: 6,
+                flex: 5,
                 child: Container(
                   margin: EdgeInsets.all(37),
                   child: PersonalCalendar(),

@@ -2,6 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:todoit/models/todo.dart';
+import 'package:todoit/screens/personal/todo_modal.dart';
+
+import '../login/login_screen.dart';
 
 class PersonalCalendar extends StatefulWidget {
   const PersonalCalendar({super.key});
@@ -24,12 +27,12 @@ class _PersonalCalendarSatae extends State<PersonalCalendar> {
       showDatePickerButton: true,
       onSelectionChanged: (CalendarSelectionDetails details) {
         DateTime date = details.date!;
-        //CalendarResource resource = details.resource!;
-        showCupertinoModalPopup(
+        // CalendarResource resource = details.resource!;
+        showDialog(
             context: context,
             builder: (BuildContext context) {
               return AlertDialog(
-                content: Text("hi"),
+                content: TodoModal(),
               );
             });
       },
