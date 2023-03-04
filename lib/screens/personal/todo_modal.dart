@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+// import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:todoit/models/todo.dart';
 
 class TodoModal extends StatefulWidget {
@@ -18,8 +19,8 @@ class _TodoModalState extends State<TodoModal> {
   @override
   Widget build(BuildContext context) {
     bool _isChecked = true;
-    return Scaffold(
-        body: ListView(
+    return CupertinoPageScaffold(
+        child: ListView(
             children: TodoList.map((todo) => CheckboxListTile(
                   title: Text(todo.name),
                   value: todo.done,

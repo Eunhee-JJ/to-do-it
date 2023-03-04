@@ -10,10 +10,10 @@ class PersonalCalendar extends StatefulWidget {
   const PersonalCalendar({super.key});
 
   @override
-  State<StatefulWidget> createState() => _PersonalCalendarSatae();
+  State<StatefulWidget> createState() => _PersonalCalendarState();
 }
 
-class _PersonalCalendarSatae extends State<PersonalCalendar> {
+class _PersonalCalendarState extends State<PersonalCalendar> {
   DateTime _selectedDay = DateTime.now();
   DateTime _focusedDay = DateTime.now();
 

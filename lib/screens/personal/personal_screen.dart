@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:todoit/models/user.dart';
 import 'package:todoit/screens/personal/personal_calendar.dart';
 
@@ -50,17 +51,10 @@ class _PersonalScreenState extends State<PersonalScreen> {
 
             // 캘린더
             Expanded(
-                flex: 9,
+                flex: 10,
                 child: Container(
-                  margin: EdgeInsets.all(37),
+                  margin: EdgeInsets.all(36),
                   child: PersonalCalendar(),
-                  // decoration: BoxDecoration(
-                  //   boxShadow: [
-                  //     BoxShadow(
-                  //       color: Colors.grey.withOpacity(0.5),
-                  //     )
-                  //   ],
-                  // ),
                 )),
 
             Expanded(
@@ -69,42 +63,50 @@ class _PersonalScreenState extends State<PersonalScreen> {
             ),
 
             // 전체 투두 모달
-            Container(
-                child: Row(
-                  children: [
-                    SizedBox(
-                      width: 40,
-                    ),
-                    Icon(
-                      CupertinoIcons.chevron_up,
-                    ),
-                    SizedBox(
-                      width: 15,
-                    ),
-                    Text(
-                      '전체 할 일 목록()',
-                      style: TextStyle(
-                        fontSize: 20,
-                        color: CupertinoColors.activeBlue,
+            TextButton(
+              onPressed: () => showBarModalBottomSheet(
+                expand: true,
+                context: context,
+                backgroundColor: Colors.transparent,
+                builder: (context) => Container(),
+              ),
+              child: Container(
+                  child: Row(
+                    children: [
+                      SizedBox(
+                        width: 40,
                       ),
-                    ),
-                  ],
-                ),
-                height: 90,
-                width: double.infinity,
-                decoration: BoxDecoration(
-                    color: Color.fromARGB(255, 248, 248, 248),
-                    shape: BoxShape.rectangle,
-                    borderRadius: BorderRadius.vertical(
-                      top: Radius.circular(30),
-                    ),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.7),
-                        offset: Offset(0, -1),
-                        blurRadius: 10,
-                      )
-                    ])),
+                      Icon(
+                        CupertinoIcons.chevron_up,
+                      ),
+                      SizedBox(
+                        width: 15,
+                      ),
+                      Text(
+                        '전체 할 일 목록()',
+                        style: TextStyle(
+                          fontSize: 20,
+                          color: CupertinoColors.activeBlue,
+                        ),
+                      ),
+                    ],
+                  ),
+                  height: 90,
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                      color: Color.fromARGB(255, 248, 248, 248),
+                      shape: BoxShape.rectangle,
+                      borderRadius: BorderRadius.vertical(
+                        top: Radius.circular(30),
+                      ),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.7),
+                          offset: Offset(0, -1),
+                          blurRadius: 10,
+                        )
+                      ])),
+            )
           ],
         )),
       ),

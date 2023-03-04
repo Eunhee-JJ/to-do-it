@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:todoit/screens/login/login_screen.dart';
 import 'package:todoit/screens/home_screen.dart';
 
@@ -32,8 +33,10 @@ class MyApp extends StatelessWidget {
       title: 'To Do It',
       theme: CupertinoThemeData(brightness: Brightness.light),
       routes: {
-        '/': (context) => LoginScreen(),
-        '/home': (context) => HomeScreen(),
+        '/': (context) => CupertinoScaffold(
+              body: LoginScreen(),
+            ),
+        '/home': (context) => CupertinoScaffold(body: HomeScreen()),
       },
     );
   }
