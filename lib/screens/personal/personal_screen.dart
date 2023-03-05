@@ -68,27 +68,25 @@ class _PersonalScreenState extends State<PersonalScreen> {
               child: Container(
                   padding:
                       EdgeInsets.only(left: 30, right: 20, top: 15, bottom: 10),
-                  child: ListView(children: [
-                    ListTile(
-                      leading: Icon(
-                        CupertinoIcons.chevron_up,
+                  child: ListTile(
+                    leading: Icon(
+                      CupertinoIcons.chevron_up,
+                      color: CupertinoColors.activeBlue,
+                    ),
+                    onTap: () => showBarModalBottomSheet(
+                      expand: true,
+                      context: context,
+                      backgroundColor: Colors.transparent,
+                      builder: (context) => Container(),
+                    ),
+                    title: Text(
+                      '전체 할 일 목록()',
+                      style: TextStyle(
+                        fontSize: 21,
                         color: CupertinoColors.activeBlue,
                       ),
-                      onTap: () => showBarModalBottomSheet(
-                        expand: true,
-                        context: context,
-                        backgroundColor: Colors.transparent,
-                        builder: (context) => Container(),
-                      ),
-                      title: Text(
-                        '전체 할 일 목록()',
-                        style: TextStyle(
-                          fontSize: 21,
-                          color: CupertinoColors.activeBlue,
-                        ),
-                      ),
                     ),
-                  ]),
+                  ),
                   height: 80,
                   width: double.infinity,
                   decoration: BoxDecoration(
