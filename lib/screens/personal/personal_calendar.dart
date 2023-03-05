@@ -36,13 +36,6 @@ class _PersonalCalendarState extends State<PersonalCalendar> {
               );
             });
       },
-      // onTap: (calendarTapDetails) => showDialog(
-      //     context: context,
-      //     builder: (BuildContext context) {
-      //       return AlertDialog(
-      //         content: Text("hi"),
-      //       );
-      //     }),
     ));
   }
 }

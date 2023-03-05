@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:todoit/models/user.dart';
+import 'package:todoit/screens/personal/bottom_modal.dart';
 import 'package:todoit/screens/personal/personal_calendar.dart';
 
 class PersonalScreen extends StatefulWidget {
@@ -77,7 +78,7 @@ class _PersonalScreenState extends State<PersonalScreen> {
                       expand: true,
                       context: context,
                       backgroundColor: Colors.transparent,
-                      builder: (context) => Container(),
+                      builder: (context) => BottomModal(),
                     ),
                     title: Text(
                       '전체 할 일 목록()',
@@ -93,7 +94,7 @@ class _PersonalScreenState extends State<PersonalScreen> {
                       color: Color.fromARGB(255, 248, 248, 248),
                       shape: BoxShape.rectangle,
                       borderRadius: BorderRadius.vertical(
-                        top: Radius.circular(25),
+                        top: Radius.circular(20),
                       ),
                       boxShadow: [
                         BoxShadow(
