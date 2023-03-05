@@ -12,8 +12,8 @@ class TodoModal extends StatefulWidget {
 
 class _TodoModalState extends State<TodoModal> {
   List<Todo> TodoList = [
-    Todo(false, DateTime.now(), 'Sample1'),
-    Todo(false, DateTime.now(), 'Sample2'),
+    Todo(1, false, DateTime.now(), 'Sample1'),
+    Todo(2, false, DateTime.now(), 'Sample2'),
   ];
 
   @override
