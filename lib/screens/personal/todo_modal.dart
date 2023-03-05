@@ -19,8 +19,8 @@ class _TodoModalState extends State<TodoModal> {
   @override
   Widget build(BuildContext context) {
     bool _isChecked = true;
-    return CupertinoPageScaffold(
-        child: ListView(
+    return Scaffold(
+        body: ListView(
             children: TodoList.map((todo) => CheckboxListTile(
                   title: Text(todo.name),
                   value: todo.done,

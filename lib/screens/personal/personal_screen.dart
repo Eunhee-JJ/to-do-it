@@ -51,7 +51,7 @@ class _PersonalScreenState extends State<PersonalScreen> {
 
             // 캘린더
             Expanded(
-                flex: 10,
+                flex: 12,
                 child: Container(
                   margin: EdgeInsets.all(36),
                   child: PersonalCalendar(),
@@ -63,41 +63,39 @@ class _PersonalScreenState extends State<PersonalScreen> {
             ),
 
             // 전체 투두 모달
-            TextButton(
-              onPressed: () => showBarModalBottomSheet(
-                expand: true,
-                context: context,
-                backgroundColor: Colors.transparent,
-                builder: (context) => Container(),
-              ),
+            Expanded(
+              flex: 2,
               child: Container(
-                  child: Row(
-                    children: [
-                      SizedBox(
-                        width: 40,
-                      ),
-                      Icon(
+                  padding:
+                      EdgeInsets.only(left: 30, right: 20, top: 15, bottom: 10),
+                  child: ListView(children: [
+                    ListTile(
+                      leading: Icon(
                         CupertinoIcons.chevron_up,
+                        color: CupertinoColors.activeBlue,
                       ),
-                      SizedBox(
-                        width: 15,
+                      onTap: () => showBarModalBottomSheet(
+                        expand: true,
+                        context: context,
+                        backgroundColor: Colors.transparent,
+                        builder: (context) => Container(),
                       ),
-                      Text(
+                      title: Text(
                         '전체 할 일 목록()',
                         style: TextStyle(
-                          fontSize: 20,
+                          fontSize: 21,
                           color: CupertinoColors.activeBlue,
                         ),
                       ),
-                    ],
-                  ),
-                  height: 90,
+                    ),
+                  ]),
+                  height: 80,
                   width: double.infinity,
                   decoration: BoxDecoration(
                       color: Color.fromARGB(255, 248, 248, 248),
                       shape: BoxShape.rectangle,
                       borderRadius: BorderRadius.vertical(
-                        top: Radius.circular(30),
+                        top: Radius.circular(25),
                       ),
                       boxShadow: [
                         BoxShadow(
