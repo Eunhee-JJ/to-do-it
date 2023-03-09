@@ -25,7 +25,7 @@ class _BottomModalState extends State<BottomModal> {
     if (states.any(interactiveStates.contains)) {
       return Colors.blue;
     }
-    return Colors.red;
+    return Colors.blue;
   }
 
   @override
@@ -68,12 +68,16 @@ class _BottomModalState extends State<BottomModal> {
 
         // 투두리스트
         ListView.builder(
+          shrinkWrap: true,
           itemCount: dummyTodo.length,
           itemBuilder: (BuildContext context, int index) {
             return Dismissible(
                 key: Key(dummyTodo[index].name),
                 child: Row(
                   children: [
+                    SizedBox(
+                      width: 20,
+                    ),
                     Checkbox(
                       checkColor: Colors.white,
                       fillColor: MaterialStateProperty.resolveWith(getColor),
@@ -83,7 +87,8 @@ class _BottomModalState extends State<BottomModal> {
                           dummyTodo[index].done = value!;
                         });
                       },
-                    )
+                    ),
+                    Text(dummyTodo[index].name),
                   ],
                 ));
           },
