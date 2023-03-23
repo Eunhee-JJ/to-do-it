@@ -75,6 +75,7 @@ class _PersonalScreenState extends State<PersonalScreen> {
                       color: CupertinoColors.activeBlue,
                     ),
                     onTap: () => showBarModalBottomSheet(
+                      enableDrag: true,
                       expand: true,
                       context: context,
                       backgroundColor: Colors.transparent,

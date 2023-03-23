@@ -1,9 +1,10 @@
-class Todo {
-  int id;
-  bool done = false;
-  DateTime date = DateTime.now(); // JSON 파싱 해야함
-  String name = '';
+import 'TodoDataSource.dart';
 
-  Todo(this.id, this.done, this.date, this.name);
-  // 반복 데이터 챌린지에서 연동
+class Todo {
+  // 반복 데이터 챌린지에서 연동...?
+  Todo({this.id = -1, this.done = false, required this.date, this.name = ''});
+  int id;
+  bool done;
+  DateTime date; // JSON 파싱 해야함
+  String name;
 }
