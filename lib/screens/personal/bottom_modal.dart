@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import '../../models/todo.dart';
+import '../../models/models.dart';
 
 class BottomModal extends StatefulWidget {
   const BottomModal({super.key});

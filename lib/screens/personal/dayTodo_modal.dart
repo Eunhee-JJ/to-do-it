@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 // import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
-import 'package:todoit/models/todo.dart';
+import 'package:todoit/models/models.dart';
 
 class DayTodoModal extends StatefulWidget {
   const DayTodoModal({super.key});

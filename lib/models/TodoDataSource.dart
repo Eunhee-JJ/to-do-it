@@ -1,7 +1,7 @@
 import 'dart:ui';
 
 import 'package:syncfusion_flutter_calendar/calendar.dart';
-import 'package:todoit/models/todo.dart';
+import 'package:todoit/models/models.dart';
 
 // MonthCellDetails Class를 커스텀한 것
 

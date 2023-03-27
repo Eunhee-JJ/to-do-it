@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
-import 'package:todoit/models/user.dart';
+import 'package:todoit/models/models.dart';
 import 'package:todoit/screens/personal/bottom_modal.dart';
 import 'package:todoit/screens/personal/personal_calendar.dart';
 
@@ -13,7 +13,7 @@ class PersonalScreen extends StatefulWidget {
 }
 
 class _PersonalScreenState extends State<PersonalScreen> {
-  User user = User();
+  MyUser user = MyUser();
 
   @override
   Widget build(BuildContext context) {
