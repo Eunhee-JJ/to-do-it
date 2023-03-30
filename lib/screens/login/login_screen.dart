@@ -17,7 +17,8 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  final storage = new FlutterSecureStorage(); // 로그인 상태 유지
+  /* ==================== 로그인 상태 유지 ==================== */
+  final storage = new FlutterSecureStorage();
   dynamic userInfo = '';
 
   @override
@@ -42,12 +43,14 @@ class _LoginScreenState extends State<LoginScreen> {
       print('로그인이 필요합니다');
     }
   }
+  /* ============================================================*/
 
   dynamic userEmail = '';
   dynamic userNickname = '';
 
   Future<void> signInWithKakao() async {
     try {
+      /* ==================== 카카오 인증 요청 ==================== */
       bool isInstalled = await isKakaoTalkInstalled();
       OAuthToken token = isInstalled
           ? await UserApi.instance.loginWithKakaoTalk()
@@ -92,13 +95,15 @@ class _LoginScreenState extends State<LoginScreen> {
         print('카카오계정으로 로그인 실패 $error');
       }
     }
+    /* ============================================================ */
 
-    //
+    /* ==================== 서비스 로그인 요청 ==================== */
     try {
       var dio = Dio();
       var param = {'nickname': '$userNickname', 'email': '$userEmail'};
 
-      Response response = await dio.post('로그인 API URL', data: param);
+      Response response =
+          await dio.post('43.200.184.84:8080/api/auth/kakao', data: param);
 
       if (response.statusCode == 200) {
         final ourAccesToken =
@@ -113,13 +118,15 @@ class _LoginScreenState extends State<LoginScreen> {
         print('접속 성공!');
         Navigator.pushNamed(context, '/home');
       } else {
-        print('error');
+        print('Not found');
+        Navigator.pushNamed(context, '/signin');
         //return false;
       }
     } catch (e) {
       print(e);
       //return false;
     }
+    /* ============================================================ */
   }
 
   @override
