@@ -38,6 +38,51 @@ class _SigninScreenState extends State<SigninScreen> {
     }
   }
 
+  Future<void> LogIn() async {
+    try {
+      var dio = Dio();
+      var param = {"email": email, "nickname": "sample"};
+
+      Response response = await dio
+          .post('http://43.200.184.84:8080/api/auth/login', data: param);
+
+      if (response.statusCode == 200) {
+        print("신규 가입자 로그인 성공!");
+        print("서비스 액세스 토큰: $response.data[accessToken]");
+        //로그인
+        Navigator.pushNamed(context, '/home');
+      } else {
+        print("신규 가입자 로그인 실패");
+      }
+    } catch (e) {
+      print(e);
+      //return false;
+    }
+  }
+
+  Future<void> SignUp() async {
+    print("signup");
+    try {
+      var dio = Dio();
+      var param = {"nickname": "sample", "email": "$email", "phone": "$phone"};
+
+      Response response = await dio
+          .post('http://43.200.184.84:8080/api/auth/join', data: param);
+
+      if (response.statusCode == 200) {
+        print("신규 가입 성공!");
+        //로그인
+        LogIn();
+        //Navigator.pushNamed(context, '/home');
+      } else {
+        print("신규 가입 실패");
+      }
+    } catch (e) {
+      print(e);
+      //return false;
+    }
+  }
+
   Future<void> Verification() async {
     // String email = temp.email.toString();
     // String code = temp.code.toString();
@@ -52,7 +97,8 @@ class _SigninScreenState extends State<SigninScreen> {
 
     if (response.data['message'] == "인증번호가 일치합니다.") {
       print("인증번호가 일치합니다.");
-      Navigator.pushNamed(context, '/home');
+      SignUp();
+      //Navigator.pushNamed(context, '/home');
     } else {
       print("인증번호가 일치하지 않습니다.");
     }

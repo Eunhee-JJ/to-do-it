@@ -8,6 +8,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 import 'package:http/http.dart' as http;
+import 'package:todoit/models/login_model.dart';
 import 'package:todoit/models/models.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -109,20 +110,20 @@ class _LoginScreenState extends State<LoginScreen> {
       Response response = await dio
           .post('http://43.200.184.84:8080/api/auth/kakao', data: param);
 
-      Login LoginResponse = Login.fromJson(response.data);
-      print(LoginResponse);
+      // Login LoginResponse = Login.fromJson(response.data);
+      // print(LoginResponse);
 
-      if (LoginResponse.isJoined != "false") {
+      if (response.data['isJoined'] != "false") {
         final ourAccesToken =
             json.decode(response.data['accessToken'].toString());
         // 직렬화를 이용하여 데이터를 입출력하기 위해 model.dart에 Login 정의 참고
-        var val = jsonEncode(LoginResponse);
+        //var val = jsonEncode(LoginResponse);
 
         // await storage.write(
         //   key: 'login',
         //   value: val,
         // );
-        print('접속 성공!');
+        print('기가입자 로그인 성공!');
 
         Navigator.pushNamed(context, '/home');
       } else {
