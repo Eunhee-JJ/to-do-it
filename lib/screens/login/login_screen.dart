@@ -112,7 +112,7 @@ class _LoginScreenState extends State<LoginScreen> {
       Login LoginResponse = Login.fromJson(response.data);
       print(LoginResponse);
 
-      if (LoginResponse.isJoined == true) {
+      if (LoginResponse.isJoined != "false") {
         final ourAccesToken =
             json.decode(response.data['accessToken'].toString());
         // 직렬화를 이용하여 데이터를 입출력하기 위해 model.dart에 Login 정의 참고
