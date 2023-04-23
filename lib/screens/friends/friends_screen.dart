@@ -12,7 +12,14 @@ class _FriendsScreenState extends State<FriendsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(),
-    );
+        body: SafeArea(
+      child: Column(
+        children: [
+          Expanded(
+            child: Text("친구 목록"),
+          ),
+        ],
+      ),
+    ));
   }
 }

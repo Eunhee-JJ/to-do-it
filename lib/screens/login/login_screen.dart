@@ -18,31 +18,31 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   /* ==================== 로그인 상태 유지 ==================== */
-  final storage = new FlutterSecureStorage();
-  dynamic userInfo = '';
+  // final storage = new FlutterSecureStorage();
+  // dynamic userInfo = '';
 
-  @override
-  void initState() {
-    super.initState();
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   print("initState");
+  //   // 비동기로 flutter secure storage 정보를 불러오는 작업
+  //   WidgetsBinding.instance.addPostFrameCallback((_) {
+  //     _asyncMethod();
+  //   });
+  // }
 
-    // 비동기로 flutter secure storage 정보를 불러오는 작업
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _asyncMethod();
-    });
-  }
+  // _asyncMethod() async {
+  //   // read 함수로 key값에 맞는 정보를 불러오고 데이터타입은 String 타입
+  //   // 데이터가 없을때는 null을 반환
+  //   userInfo = await storage.read(key: 'login');
 
-  _asyncMethod() async {
-    // read 함수로 key값에 맞는 정보를 불러오고 데이터타입은 String 타입
-    // 데이터가 없을때는 null을 반환
-    userInfo = await storage.read(key: 'login');
-
-    // user의 정보가 있다면 로그인 후 들어가는 첫 페이지로 넘어가게 합니다.
-    if (userInfo != null) {
-      Navigator.pushNamed(context, '/home');
-    } else {
-      print('로그인이 필요합니다');
-    }
-  }
+  //   // user의 정보가 있다면 로그인 후 들어가는 첫 페이지로 넘어가게 합니다.
+  //   if (userInfo != null) {
+  //     Navigator.pushNamed(context, '/home');
+  //   } else {
+  //     print('로그인이 필요합니다');
+  //   }
+  // }
   /* ============================================================*/
 
   dynamic userEmail = '';
@@ -70,7 +70,7 @@ class _LoginScreenState extends State<LoginScreen> {
       try {
         User user = await UserApi.instance.me();
         print('사용자 정보 요청 성공'
-            '\n회원번호: ${user.id}' // 얘 뭐지?
+            '\n회원번호: ${user.id}' // 카카오 회원 번호
             '\n닉네임: ${user.kakaoAccount?.profile?.nickname}'
             '\n이메일: ${user.kakaoAccount?.email}');
         userNickname = user.kakaoAccount?.profile?.nickname;
@@ -78,7 +78,7 @@ class _LoginScreenState extends State<LoginScreen> {
       } catch (error) {
         print('사용자 정보 요청 실패 $error');
       }
-      final profileInfo = json.decode(response.body); // 얜 뭐지?
+      final profileInfo = json.decode(response.body); // Dio
       print('카톡 로그인 성공 ${token.accessToken}');
       print(profileInfo.toString());
     } catch (error) {
@@ -98,24 +98,32 @@ class _LoginScreenState extends State<LoginScreen> {
     /* ============================================================ */
 
     /* ==================== 서비스 로그인 요청 ==================== */
+    //
     try {
       var dio = Dio();
-      var param = {'nickname': '$userNickname', 'email': '$userEmail'};
+      var param = {
+        'nickname': '$userNickname',
+        'email': '$userEmail',
+      };
+      // 서비스 가입 여부 확인
+      Response response = await dio
+          .post('http://43.200.184.84:8080/api/auth/kakao', data: param);
 
-      Response response =
-          await dio.post('43.200.184.84:8080/api/auth/kakao', data: param);
+      Login LoginResponse = Login.fromJson(response.data);
+      print(LoginResponse);
 
-      if (response.statusCode == 200) {
+      if (LoginResponse.isJoined == true) {
         final ourAccesToken =
             json.decode(response.data['accessToken'].toString());
         // 직렬화를 이용하여 데이터를 입출력하기 위해 model.dart에 Login 정의 참고
-        var val = jsonEncode(Login('$userNickname', '$userEmail'));
+        var val = jsonEncode(LoginResponse);
 
-        await storage.write(
-          key: 'login',
-          value: val,
-        );
+        // await storage.write(
+        //   key: 'login',
+        //   value: val,
+        // );
         print('접속 성공!');
+
         Navigator.pushNamed(context, '/home');
       } else {
         print('Not found');

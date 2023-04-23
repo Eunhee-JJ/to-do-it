@@ -13,7 +13,8 @@ class PersonalScreen extends StatefulWidget {
 }
 
 class _PersonalScreenState extends State<PersonalScreen> {
-  MyUser user = MyUser();
+  MyUser user =
+      MyUser('id', '1234@gmail.com', '01038802105', '', 'nickname', '');
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +36,7 @@ class _PersonalScreenState extends State<PersonalScreen> {
                 ),
                 Expanded(
                     flex: 8,
-                    child: Text("${user.name}님의 투두잇",
+                    child: Text("${user.nickname}님의 투두잇",
                         style: TextStyle(fontSize: 30))),
                 Expanded(child: SizedBox()),
                 Expanded(

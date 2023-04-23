@@ -4,33 +4,56 @@ class Challenge {
 
 class Todo {
   // 반복 데이터 챌린지에서 연동...?
-  Todo({this.id = -1, this.done = false, required this.date, this.name = ''});
-  int id;
-  bool done;
-  DateTime date; // JSON 파싱 해야함
-  String name;
+  final int todoID;
+  final String userID;
+  DateTime date = DateTime.now(); // JSON 파싱 해야함
+  final String name;
+  late final bool done;
+
+  Todo(
+    this.todoID,
+    this.userID,
+    this.date,
+    this.name,
+    this.done,
+  );
 }
 
 class MyUser {
-  String name = '';
-  String profileImg = '';
+  final String userID;
+  final String email;
+  final String phone;
+  final String social;
+  final String nickname;
+  final String profileImg; // DB에 없네..?
+
+  MyUser(this.userID, this.email, this.phone, this.social, this.nickname,
+      this.profileImg);
 }
 
 class Login {
-  final String accountName;
-  final String password;
+  final String nickname;
+  final String email;
+  final String isJoined;
+  final String message;
   //final String user_id;
 
-  Login(this.accountName, this.password);
+  Login(
+      {required this.nickname,
+      required this.email,
+      required this.isJoined,
+      required this.message});
 
   Login.fromJson(Map<String, dynamic> json)
-      : accountName = json['accountName'],
-        password = json['password'];
+      : nickname = json['nickname'],
+        email = json['email'],
+        isJoined = json['isJoined'],
+        message = json['message'];
   //user_id = json['user_id'];
 
   Map<String, dynamic> toJson() => {
-        'accountName': accountName,
-        'password': password,
+        'nickname': nickname,
+        'email': email,
         //'user_id': user_id,
       };
 }

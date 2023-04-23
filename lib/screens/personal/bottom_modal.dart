@@ -12,8 +12,8 @@ class BottomModal extends StatefulWidget {
 
 class _BottomModalState extends State<BottomModal> {
   List<Todo> dummyTodo = [
-    Todo(id: 1, done: false, date: DateTime.now(), name: 'Dummy1'),
-    Todo(id: 2, done: false, date: DateTime.now(), name: 'Dummy2'),
+    Todo(1, '123', DateTime.now(), 'Dummy1', false),
+    Todo(2, '123', DateTime.now(), 'Dummy2', false),
   ];
 
   Color getColor(Set<MaterialState> states) {

@@ -12,8 +12,8 @@ class DayTodoModal extends StatefulWidget {
 
 class _DayTodoModalState extends State<DayTodoModal> {
   List<Todo> TodoList = [
-    Todo(id: 1, done: false, date: DateTime.now(), name: 'Sample1'),
-    Todo(id: 2, done: false, date: DateTime.now(), name: 'Sample2'),
+    Todo(1, '123', DateTime.now(), 'Dummy1', false),
+    Todo(2, '123', DateTime.now(), 'Dummy2', false),
   ];
 
   Color getColor(Set<MaterialState> states) {
