@@ -1,7 +1,9 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:todoit/models/auth_model.dart';
+import 'package:todoit/providers/user_provider.dart';
 
 class SigninScreen extends StatefulWidget {
   const SigninScreen({super.key});
@@ -10,7 +12,8 @@ class SigninScreen extends StatefulWidget {
 }
 
 class _SigninScreenState extends State<SigninScreen> {
-  String email = '@';
+  String email = '';
+  String nickname = '';
   late String code = '';
   late String phone = '';
   // Auth temp = new Auth(
@@ -22,10 +25,11 @@ class _SigninScreenState extends State<SigninScreen> {
   //     refreshToken: '');
 
   Future<void> Certification() async {
+    email = context.read<UserProvider>().email;
     var dio = Dio();
     var param = {
-      'email': '$email',
-      'phone': '$phone',
+      'email': email,
+      'phone': phone,
     };
     Response response = await dio.post(
         'http://43.200.184.84:8080/api/auth/sms-certification',
@@ -41,7 +45,7 @@ class _SigninScreenState extends State<SigninScreen> {
   Future<void> LogIn() async {
     try {
       var dio = Dio();
-      var param = {"email": email, "nickname": "sample"};
+      var param = {"email": email, "nickname": nickname};
 
       Response response = await dio
           .post('http://43.200.184.84:8080/api/auth/login', data: param);
@@ -62,15 +66,17 @@ class _SigninScreenState extends State<SigninScreen> {
 
   Future<void> SignUp() async {
     print("signup");
+    nickname = context.read<UserProvider>().nickname;
     try {
       var dio = Dio();
-      var param = {"nickname": "sample", "email": "$email", "phone": "$phone"};
+      var param = {"nickname": nickname, "email": email, "phone": phone};
 
       Response response = await dio
           .post('http://43.200.184.84:8080/api/auth/join', data: param);
 
       if (response.statusCode == 200) {
         print("신규 가입 성공!");
+        context.read<UserProvider>().setPhone(phone);
         //로그인
         LogIn();
         //Navigator.pushNamed(context, '/home');
@@ -88,8 +94,8 @@ class _SigninScreenState extends State<SigninScreen> {
     // String code = temp.code.toString();
     var dio = Dio();
     var param = {
-      'email': '$email',
-      'code': '$code',
+      'email': email,
+      'code': code,
     };
     Response response = await dio.post(
         'http://43.200.184.84:8080/api/auth/sms-verification',

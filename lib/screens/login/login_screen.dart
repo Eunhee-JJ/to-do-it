@@ -8,8 +8,10 @@ import 'package:flutter/services.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
 import 'package:todoit/models/login_model.dart';
 import 'package:todoit/models/models.dart';
+import 'package:todoit/providers/user_provider.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -46,8 +48,8 @@ class _LoginScreenState extends State<LoginScreen> {
   // }
   /* ============================================================*/
 
-  dynamic userEmail = '';
-  dynamic userNickname = '';
+  dynamic kakaoEmail = '';
+  dynamic kakaoNickname = '';
 
   Future<void> signInWithKakao() async {
     try {
@@ -74,14 +76,14 @@ class _LoginScreenState extends State<LoginScreen> {
             '\n회원번호: ${user.id}' // 카카오 회원 번호
             '\n닉네임: ${user.kakaoAccount?.profile?.nickname}'
             '\n이메일: ${user.kakaoAccount?.email}');
-        userNickname = user.kakaoAccount?.profile?.nickname;
-        userEmail = user.kakaoAccount?.email;
+        kakaoNickname = user.kakaoAccount?.profile?.nickname;
+        kakaoEmail = user.kakaoAccount?.email;
       } catch (error) {
         print('사용자 정보 요청 실패 $error');
       }
       final profileInfo = json.decode(response.body); // Dio
       print('카톡 로그인 성공 ${token.accessToken}');
-      print(profileInfo.toString());
+      //print(profileInfo.toString());
     } catch (error) {
       // 의도적인 로그인 취소로 보고 카카오계정으로 로그인 시도 없이 로그인 취소로 처리 (예: 뒤로 가기)
       if (error is PlatformException && error.code == 'CANCELED') {
@@ -103,29 +105,49 @@ class _LoginScreenState extends State<LoginScreen> {
     try {
       var dio = Dio();
       var param = {
-        'nickname': '$userNickname',
-        'email': '$userEmail',
+        'nickname': '$kakaoNickname',
+        'email': '$kakaoEmail',
       };
       // 서비스 가입 여부 확인
       Response response = await dio
           .post('http://43.200.184.84:8080/api/auth/kakao', data: param);
 
-      // Login LoginResponse = Login.fromJson(response.data);
-      // print(LoginResponse);
+      // 유저 정보 저장
+      // ignore: use_build_context_synchronously
+      print(response.data);
+      context.read<UserProvider>().setNickname(response.data['nickname']);
+      // ignore: use_build_context_synchronously
+      context.read<UserProvider>().setEmail(response.data['email']);
 
+      String nickname = context.read<UserProvider>().nickname;
+      String email = context.read<UserProvider>().email;
       if (response.data['isJoined'] != "false") {
-        final ourAccesToken =
-            json.decode(response.data['accessToken'].toString());
-        // 직렬화를 이용하여 데이터를 입출력하기 위해 model.dart에 Login 정의 참고
-        //var val = jsonEncode(LoginResponse);
+        // 서비스 로그인 요청
+        var dio = Dio();
+        var param = {
+          'nickname': nickname,
+          'email': email,
+        };
+        Response response = await dio
+            .post('http://43.200.184.84:8080/api/auth/login', data: param);
 
-        // await storage.write(
-        //   key: 'login',
-        //   value: val,
-        // );
-        print('기가입자 로그인 성공!');
+        if (response.data['nickname'] != "example") {
+          context
+              .read<UserProvider>()
+              .setAccessToken(response.data['accessToken']);
+          // final ourAccesToken =
+          //     json.decode(response.data['accessToken'].toString());
+          // 직렬화를 이용하여 데이터를 입출력하기 위해 model.dart에 Login 정의 참고
+          //var val = jsonEncode(LoginResponse);
 
-        Navigator.pushNamed(context, '/home');
+          // await storage.write(
+          //   key: 'login',
+          //   value: val,
+          // );
+          print('기가입자 로그인 성공!');
+
+          Navigator.pushNamed(context, '/home');
+        }
       } else {
         print('Not found');
         Navigator.pushNamed(context, '/signin');

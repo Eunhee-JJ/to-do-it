@@ -26,6 +26,8 @@ class MyUser {
   String social;
   String nickname;
   String profileImg; // DB에 없네..?
+  String accessToken;
+  String refreshToken;
 
   MyUser(
       {required this.userID,
@@ -33,5 +35,7 @@ class MyUser {
       required this.phone,
       required this.social,
       required this.nickname,
-      required this.profileImg});
+      required this.profileImg,
+      required this.accessToken,
+      required this.refreshToken});
 }
