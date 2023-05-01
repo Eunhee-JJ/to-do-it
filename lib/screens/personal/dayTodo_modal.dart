@@ -50,16 +50,18 @@ class _DayTodoModalState extends State<DayTodoModal> {
         ),
       );
       print(response);
-      todoList = (response.data["task"]).map<Todo>((json) {
-        return Todo(
-          taskId: json["taskId"],
-          task: json["task"],
-          date: date,
-          complete: json["complete"],
-          challenge: json["challenge"],
-        );
-      }).toList();
-      context.read<TodoProvider>().setTodoList(todoList);
+      context
+          .read<TodoProvider>()
+          .setTodoList((response.data["task"]).map<Todo>((json) {
+            return Todo(
+              taskId: json["taskId"],
+              task: json["task"],
+              date: date,
+              complete: json["complete"],
+              challenge: json["challenge"],
+            );
+          }).toList());
+      //context.read<TodoProvider>().setTodoList(todoList);
     } catch (error) {
       print(error);
     }
@@ -81,15 +83,65 @@ class _DayTodoModalState extends State<DayTodoModal> {
       );
       print(response);
 
-      ;
-      todoList.add(Todo(
-        taskId: response.data["taskId"],
-        task: response.data["task"],
-        date: context.read<TodoProvider>().date,
-        complete: response.data["complete"] == "true" ? true : false,
-        challenge: response.data["challenge"] == "true" ? true : false,
-      ));
-      context.read<TodoProvider>().setTodoList(todoList);
+      context.read<TodoProvider>().add(Todo(
+            taskId: response.data["taskId"],
+            task: response.data["task"],
+            date: context.read<TodoProvider>().date,
+            complete: response.data["complete"] == "true" ? true : false,
+            challenge: response.data["challenge"] == "true" ? true : false,
+          ));
+      //context.watch<TodoProvider>().setTodoList(todoList);
+    } catch (error) {
+      print(error);
+    }
+  }
+
+  Future<void> deleteTodo(int taskId) async {
+    print("Delete Task:" + taskId.toString());
+
+    var dio = Dio();
+    print("AT:" + context.read<UserProvider>().accessToken);
+
+    try {
+      final response = await dio.request(
+        'http://43.200.184.84:8080/api/todo?taskId=' + taskId.toString(),
+        options: Options(
+          method: 'DELETE',
+          headers: {"Authorization": context.read<UserProvider>().accessToken},
+        ),
+      );
+      print(response);
+
+      if (response.data['message'] != "존재하지 않는 투두 번호입니다.") {
+        context.watch<TodoProvider>().remove(taskId);
+      }
+      print("hi");
+      //context.watch<TodoProvider>().setTodoList(todoList);
+    } catch (error) {
+      print(error);
+    }
+  }
+
+  Future<void> completeTodo(int taskId) async {
+    print("Complete Task:" + taskId.toString());
+
+    var dio = Dio();
+    print("AT:" + context.read<UserProvider>().accessToken);
+
+    try {
+      final response = await dio.request(
+        'http://43.200.184.84:8080/api/todo/complete?taskId=' +
+            taskId.toString(),
+        options: Options(
+          method: 'POST',
+          headers: {"Authorization": context.read<UserProvider>().accessToken},
+        ),
+      );
+      print(response);
+
+      context.read<TodoProvider>().toggleDone(taskId);
+
+      //context.watch<TodoProvider>().setTodoList(todoList);
     } catch (error) {
       print(error);
     }
@@ -98,7 +150,8 @@ class _DayTodoModalState extends State<DayTodoModal> {
   @override
   Widget build(BuildContext context) {
     sDate = context.read<TodoProvider>().date;
-    getTodos(context.read<TodoProvider>().date);
+    getTodos(context.watch<TodoProvider>().date);
+
     return AlertDialog(
         content: Container(
             width: 500,
@@ -106,6 +159,7 @@ class _DayTodoModalState extends State<DayTodoModal> {
             child:
                 Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
               Expanded(
+                // 날짜
                 flex: 3,
                 child: Container(
                   child: Text(sDate, style: TextStyle(fontSize: 25)),
@@ -113,14 +167,31 @@ class _DayTodoModalState extends State<DayTodoModal> {
                 ),
               ),
               Expanded(
+                  // 투두 목록
                   flex: 15,
                   child: ListView.builder(
                     shrinkWrap: true,
-                    itemCount: todoList.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      getTodos(context.read<TodoProvider>().date);
+                    itemCount: context.read<TodoProvider>().todoList.length,
+                    itemBuilder: (context, int index) {
+                      //print("HI");
+                      //print(todoList);
+                      //getTodos(context.read<TodoProvider>().date);
                       return Dismissible(
-                          key: Key(todoList[index].task),
+                          onDismissed: (direction) {
+                            if (direction == DismissDirection.endToStart) {
+                              setState(() {
+                                deleteTodo(context
+                                    .read<TodoProvider>()
+                                    .todoList[index]
+                                    .taskId);
+                                print("index: ${index}");
+                              });
+                            }
+                          },
+                          key: Key(context
+                              .read<TodoProvider>()
+                              .todoList[index]
+                              .task),
                           child: Row(
                             children: [
                               SizedBox(
@@ -130,19 +201,29 @@ class _DayTodoModalState extends State<DayTodoModal> {
                                 checkColor: Colors.white,
                                 fillColor:
                                     MaterialStateProperty.resolveWith(getColor),
-                                value: todoList[index].complete,
+                                value: context
+                                    .read<TodoProvider>()
+                                    .todoList[index]
+                                    .complete,
                                 onChanged: (bool? value) {
                                   setState(() {
-                                    todoList[index].complete = value!;
+                                    completeTodo(context
+                                        .read<TodoProvider>()
+                                        .todoList[index]
+                                        .taskId);
                                   });
                                 },
                               ),
-                              Text(todoList[index].task),
+                              Text(context
+                                  .read<TodoProvider>()
+                                  .todoList[index]
+                                  .task),
                             ],
                           ));
                     },
                   )),
               Expanded(
+                  // Add 버튼
                   flex: 3,
                   child: Row(
                     children: [

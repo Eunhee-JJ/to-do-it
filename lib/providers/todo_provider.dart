@@ -5,7 +5,7 @@ import 'package:todoit/models/models.dart';
 class TodoProvider extends ChangeNotifier {
   //Map<DateTime, List<Todo>> _allTodo = {};
   List<Todo> _todoList = [];
-  String _date = DateFormat('yyyy-MM-dd').format(DateTime.now());
+  String _date = DateFormat('yyyy').format(DateTime.now());
 
   List<Todo> get todoList => _todoList;
   String get date => _date;
@@ -16,20 +16,16 @@ class TodoProvider extends ChangeNotifier {
 
   void setTodoList(List<Todo> newTodoList) {
     _todoList = newTodoList;
+    notifyListeners();
   }
 
   void setDate(String date) {
     _date = date;
+    notifyListeners();
   }
 
-  void add(int id, String date, String input) {
-    // _todoList.add(Todo(
-    //     taskId: id,
-    //     date: date,
-    //     task: input,
-    //     complete: false,
-    //     challenge: false));
-    //_todoList.add(Todo(id, date, input, false, false));
+  void add(Todo todo) {
+    _todoList.add(todo);
     notifyListeners();
   }
 
@@ -48,7 +44,25 @@ class TodoProvider extends ChangeNotifier {
 
   void edit() {}
 
-  void toggleDone() {}
+  void toggleDone(int id) {
+    for (int i = 0; i < _todoList.length; i++) {
+      if (_todoList[i].taskId == id) {
+        _todoList[i].complete = !_todoList[i].complete;
+        print("토글: [${id}]" + _todoList[i].task);
+        break;
+      }
+    }
+    notifyListeners();
+  }
 
-  void remove(int id) {}
+  void remove(int id) {
+    for (int i = 0; i < _todoList.length; i++) {
+      if (_todoList[i].taskId == id) {
+        _todoList.removeAt(i);
+        print("삭제됨: [${id}]" + _todoList[i].task);
+        break;
+      }
+    }
+    notifyListeners();
+  }
 }
