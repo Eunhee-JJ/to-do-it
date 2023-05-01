@@ -1,22 +1,25 @@
+import 'package:intl/intl.dart';
+
 class Challenge {
   String challengeName = '';
 }
 
 class Todo {
   // 반복 데이터 챌린지에서 연동...?
-  final int todoID;
-  final String userID;
-  DateTime date = DateTime.now(); // JSON 파싱 해야함
-  final String name;
-  late final bool done;
+  final int taskId;
+  //final String userID;
+  String date = DateFormat('yyyy-MM-dd').format(DateTime.now()); // JSON 파싱 해야함
+  final String task;
+  late final bool complete;
+  late final bool challenge;
 
   Todo(
-    this.todoID,
-    this.userID,
-    this.date,
-    this.name,
-    this.done,
-  );
+      {required this.taskId,
+      //this.userID,
+      required this.date,
+      required this.task,
+      required this.complete,
+      required this.challenge});
 }
 
 class MyUser {

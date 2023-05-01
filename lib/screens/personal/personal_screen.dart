@@ -1,7 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:provider/provider.dart';
 import 'package:todoit/models/models.dart';
+import 'package:todoit/providers/user_provider.dart';
 import 'package:todoit/screens/personal/bottom_modal.dart';
 import 'package:todoit/screens/personal/personal_calendar.dart';
 
@@ -13,12 +15,14 @@ class PersonalScreen extends StatefulWidget {
 }
 
 class _PersonalScreenState extends State<PersonalScreen> {
-  late MyUser user;
+  //late MyUser user;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
+        body: ChangeNotifierProvider(
+      create: (BuildContext context) => UserProvider(),
+      child: Center(
         child: SafeArea(
             child: Column(
           mainAxisAlignment: MainAxisAlignment.end,
@@ -35,13 +39,15 @@ class _PersonalScreenState extends State<PersonalScreen> {
                 ),
                 Expanded(
                     flex: 8,
-                    child: Text("${user.nickname}님의 투두잇",
+                    child: Text(
+                        "${context.read<UserProvider>().user.nickname}님의 투두잇",
                         style: TextStyle(fontSize: 30))),
                 Expanded(child: SizedBox()),
                 Expanded(
                     flex: 2,
                     child: CircleAvatar(
-                      backgroundImage: AssetImage(user.profileImg),
+                      backgroundImage:
+                          AssetImage(context.read<UserProvider>().profileImage),
                       radius: 30,
                     )),
                 SizedBox(
@@ -57,12 +63,10 @@ class _PersonalScreenState extends State<PersonalScreen> {
                   margin: EdgeInsets.all(36),
                   child: PersonalCalendar(),
                 )),
-
             Expanded(
               flex: 1,
               child: SizedBox(),
             ),
-
             // 전체 투두 모달
             Expanded(
               flex: 2,
@@ -108,6 +112,6 @@ class _PersonalScreenState extends State<PersonalScreen> {
           ],
         )),
       ),
-    );
+    ));
   }
 }

@@ -12,8 +12,8 @@ class BottomModal extends StatefulWidget {
 
 class _BottomModalState extends State<BottomModal> {
   List<Todo> dummyTodo = [
-    Todo(1, '123', DateTime.now(), 'Dummy1', false),
-    Todo(2, '123', DateTime.now(), 'Dummy2', false),
+    // Todo(1, DateTime.now(), 'Dummy1', false, false),
+    // Todo(2, DateTime.now(), 'Dummy2', false, false),
   ];
 
   Color getColor(Set<MaterialState> states) {
@@ -72,7 +72,7 @@ class _BottomModalState extends State<BottomModal> {
           itemCount: dummyTodo.length,
           itemBuilder: (BuildContext context, int index) {
             return Dismissible(
-                key: Key(dummyTodo[index].name),
+                key: Key(dummyTodo[index].task),
                 child: Row(
                   children: [
                     SizedBox(
@@ -81,14 +81,14 @@ class _BottomModalState extends State<BottomModal> {
                     Checkbox(
                       checkColor: Colors.white,
                       fillColor: MaterialStateProperty.resolveWith(getColor),
-                      value: dummyTodo[index].done,
+                      value: dummyTodo[index].complete,
                       onChanged: (bool? value) {
                         setState(() {
-                          dummyTodo[index].done = value!;
+                          dummyTodo[index].complete = value!;
                         });
                       },
                     ),
-                    Text(dummyTodo[index].name),
+                    Text(dummyTodo[index].task),
                   ],
                 ));
           },

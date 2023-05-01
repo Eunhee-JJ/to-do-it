@@ -21,31 +21,31 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   /* ==================== 로그인 상태 유지 ==================== */
-  // final storage = new FlutterSecureStorage();
-  // dynamic userInfo = '';
+  final storage = new FlutterSecureStorage();
+  dynamic userInfo = '';
 
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   print("initState");
-  //   // 비동기로 flutter secure storage 정보를 불러오는 작업
-  //   WidgetsBinding.instance.addPostFrameCallback((_) {
-  //     _asyncMethod();
-  //   });
-  // }
+  @override
+  void initState() {
+    super.initState();
+    print("initState");
+    // 비동기로 flutter secure storage 정보를 불러오는 작업
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _asyncMethod();
+    });
+  }
 
-  // _asyncMethod() async {
-  //   // read 함수로 key값에 맞는 정보를 불러오고 데이터타입은 String 타입
-  //   // 데이터가 없을때는 null을 반환
-  //   userInfo = await storage.read(key: 'login');
+  _asyncMethod() async {
+    // read 함수로 key값에 맞는 정보를 불러오고 데이터타입은 String 타입
+    // 데이터가 없을때는 null을 반환
+    userInfo = await storage.read(key: 'login');
 
-  //   // user의 정보가 있다면 로그인 후 들어가는 첫 페이지로 넘어가게 합니다.
-  //   if (userInfo != null) {
-  //     Navigator.pushNamed(context, '/home');
-  //   } else {
-  //     print('로그인이 필요합니다');
-  //   }
-  // }
+    // user의 정보가 있다면 로그인 후 들어가는 첫 페이지로 넘어가게 합니다.
+    if (userInfo != null) {
+      Navigator.pushNamed(context, '/home');
+    } else {
+      print('로그인이 필요합니다');
+    }
+  }
   /* ============================================================*/
 
   dynamic kakaoEmail = '';
@@ -135,17 +135,16 @@ class _LoginScreenState extends State<LoginScreen> {
           context
               .read<UserProvider>()
               .setAccessToken(response.data['accessToken']);
-          // final ourAccesToken =
-          //     json.decode(response.data['accessToken'].toString());
-          // 직렬화를 이용하여 데이터를 입출력하기 위해 model.dart에 Login 정의 참고
-          //var val = jsonEncode(LoginResponse);
+          final ourAccesToken = response.data['accessToken'];
+          //직렬화를 이용하여 데이터를 입출력하기 위해 model.dart에 Login 정의 참고
+          //var val = json.decode(json.encode(context.read<UserProvider>().user));
 
-          // await storage.write(
-          //   key: 'login',
-          //   value: val,
-          // );
+          await storage.write(
+            key: 'login',
+            value: ourAccesToken,
+          );
           print('기가입자 로그인 성공!');
-
+          print("서비스 액세스 토큰: " + context.read<UserProvider>().accessToken);
           Navigator.pushNamed(context, '/home');
         }
       } else {
