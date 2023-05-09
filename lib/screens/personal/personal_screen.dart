@@ -20,9 +20,11 @@ class _PersonalScreenState extends State<PersonalScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: ChangeNotifierProvider(
-      create: (BuildContext context) => UserProvider(),
-      child: Center(
+      body:
+          //   ChangeNotifierProvider(
+          // create: (BuildContext context) => UserProvider(),
+          // child:
+          Center(
         child: SafeArea(
             child: Column(
           mainAxisAlignment: MainAxisAlignment.end,
@@ -112,6 +114,7 @@ class _PersonalScreenState extends State<PersonalScreen> {
           ],
         )),
       ),
-    ));
+      //)
+    );
   }
 }

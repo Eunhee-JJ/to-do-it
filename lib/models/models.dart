@@ -1,7 +1,27 @@
 import 'package:intl/intl.dart';
 
+class Friends {
+  String nickname = '';
+  String phone = '';
+}
+
 class Challenge {
-  String challengeName = '';
+  String title = '';
+  String content = '';
+  List<String> day = [];
+  List<String> off_day = [];
+  String start_date = '';
+  String end_date = '';
+  List<Friends> friends = [];
+
+  Challenge(
+      {required this.title,
+      required this.content,
+      required this.day,
+      required this.off_day,
+      required this.start_date,
+      required this.end_date,
+      required this.friends});
 }
 
 class Todo {
@@ -11,7 +31,8 @@ class Todo {
   String date = DateFormat('yyyy-MM-dd').format(DateTime.now()); // JSON 파싱 해야함
   final String task;
   late final bool complete;
-  late final bool challenge;
+  late final bool isFromChallenge;
+  final String challenge;
 
   Todo(
       {required this.taskId,
@@ -19,6 +40,7 @@ class Todo {
       required this.date,
       required this.task,
       required this.complete,
+      required this.isFromChallenge,
       required this.challenge});
 }
 

@@ -39,7 +39,7 @@ class _DayTodoModalState extends State<DayTodoModal> {
     print(date);
 
     var dio = Dio();
-    print("AT:" + Provider.of<UserProvider>(context).accessToken);
+    print("AT:" + context.read<UserProvider>().accessToken);
 
     try {
       final response = await dio.request(
@@ -58,7 +58,9 @@ class _DayTodoModalState extends State<DayTodoModal> {
               task: json["task"],
               date: date,
               complete: json["complete"],
-              challenge: json["challenge"],
+              isFromChallenge: false,
+              //json["isFromChallenge"],
+              challenge: '',
             );
           }).toList());
       //context.read<TodoProvider>().setTodoList(todoList);
@@ -83,12 +85,14 @@ class _DayTodoModalState extends State<DayTodoModal> {
       );
       print(response);
 
-      context.read<TodoProvider>().add(Todo(
+      context.watch<TodoProvider>().add(Todo(
             taskId: response.data["taskId"],
             task: response.data["task"],
             date: context.read<TodoProvider>().date,
             complete: response.data["complete"] == "true" ? true : false,
-            challenge: response.data["challenge"] == "true" ? true : false,
+            isFromChallenge: false,
+            //response.data["isFromChallenge"] == "true" ? true : false,
+            challenge: '',
           ));
       //context.watch<TodoProvider>().setTodoList(todoList);
     } catch (error) {
@@ -150,7 +154,7 @@ class _DayTodoModalState extends State<DayTodoModal> {
   @override
   Widget build(BuildContext context) {
     sDate = context.read<TodoProvider>().date;
-    getTodos(context.watch<TodoProvider>().date);
+    getTodos(context.read<TodoProvider>().date);
 
     return AlertDialog(
         content: Container(
@@ -181,9 +185,10 @@ class _DayTodoModalState extends State<DayTodoModal> {
                             if (direction == DismissDirection.endToStart) {
                               setState(() {
                                 deleteTodo(context
-                                    .read<TodoProvider>()
+                                    .watch<TodoProvider>()
                                     .todoList[index]
                                     .taskId);
+                                getTodos(context.read<TodoProvider>().date);
                                 print("index: ${index}");
                               });
                             }
@@ -208,7 +213,7 @@ class _DayTodoModalState extends State<DayTodoModal> {
                                 onChanged: (bool? value) {
                                   setState(() {
                                     completeTodo(context
-                                        .read<TodoProvider>()
+                                        .watch<TodoProvider>()
                                         .todoList[index]
                                         .taskId);
                                   });
