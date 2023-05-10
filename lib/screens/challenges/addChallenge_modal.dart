@@ -2,9 +2,11 @@ import 'package:day_picker/day_picker.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 // import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:todoit/models/models.dart';
+import 'package:todoit/providers/challenge_provider.dart';
 import 'package:todoit/providers/todo_provider.dart';
 import 'package:todoit/providers/user_provider.dart';
 
@@ -16,13 +18,11 @@ class AddChallengeModal extends StatefulWidget {
 }
 
 class _AddChallengeModalState extends State<AddChallengeModal> {
-  List<Todo> todoList = [
-    // Todo(1, DateTime.now(), 'Dummy1', false, false),
-    // Todo(2, DateTime.now(), 'Dummy2', false, false),
-  ];
-  String sDate = '';
-
-  String input = "";
+  String title = "";
+  String content = "";
+  List<String> selectedDays = [];
+  DateTime startDate = DateTime.now();
+  DateTime endDate = DateTime.now();
 
   Color getColor(Set<MaterialState> states) {
     const Set<MaterialState> interactiveStates = <MaterialState>{
@@ -36,116 +36,42 @@ class _AddChallengeModalState extends State<AddChallengeModal> {
     return Colors.blue;
   }
 
-  Future<void> getTodos(String date) async {
-    print(date);
+  Future<void> addChallenge() async {
+    print("addChallenge:" + title);
 
     var dio = Dio();
     print("AT:" + context.read<UserProvider>().accessToken);
 
     try {
-      final response = await dio.request(
-        'http://43.200.184.84:8080/api/todo?date=' + date,
-        options: Options(
-          method: 'GET',
-          headers: {"Authorization": context.read<UserProvider>().accessToken},
-        ),
-      );
-      print(response);
-      context
-          .read<TodoProvider>()
-          .setTodoList((response.data["task"]).map<Todo>((json) {
-            return Todo(
-              taskId: json["taskId"],
-              task: json["task"],
-              date: date,
-              complete: json["complete"],
-              isFromChallenge: false,
-              //json["isFromChallenge"],
-              challenge: '',
-            );
-          }).toList());
-      //context.read<TodoProvider>().setTodoList(todoList);
-    } catch (error) {
-      print(error);
-    }
-  }
-
-  Future<void> addTodo(String task) async {
-    print("addTask:" + task);
-
-    var dio = Dio();
-    print("AT:" + context.read<UserProvider>().accessToken);
-
-    try {
-      final response = await dio.request(
-        'http://43.200.184.84:8080/api/todo?task=' + task,
-        options: Options(
-          method: 'POST',
-          headers: {"Authorization": context.read<UserProvider>().accessToken},
-        ),
-      );
+      final response =
+          await dio.request('http://43.200.184.84:8080/api/challenge',
+              options: Options(
+                method: 'POST',
+                headers: {
+                  "Authorization": context.read<UserProvider>().accessToken
+                },
+              ),
+              data: {
+            'title': title,
+            'content': content,
+            'day': selectedDays,
+            'off_day': [],
+            'start_date': DateFormat('yyyy-MM-dd').format(startDate),
+            'end_date': DateFormat('yyyy-MM-dd').format(endDate),
+            'friends': []
+          });
       print(response);
 
-      context.watch<TodoProvider>().add(Todo(
-            taskId: response.data["taskId"],
-            task: response.data["task"],
-            date: context.read<TodoProvider>().date,
-            complete: response.data["complete"] == "true" ? true : false,
-            isFromChallenge: false,
-            //response.data["isFromChallenge"] == "true" ? true : false,
-            challenge: '',
-          ));
-      //context.watch<TodoProvider>().setTodoList(todoList);
-    } catch (error) {
-      print(error);
-    }
-  }
-
-  Future<void> deleteTodo(int taskId) async {
-    print("Delete Task:" + taskId.toString());
-
-    var dio = Dio();
-    print("AT:" + context.read<UserProvider>().accessToken);
-
-    try {
-      final response = await dio.request(
-        'http://43.200.184.84:8080/api/todo?taskId=' + taskId.toString(),
-        options: Options(
-          method: 'DELETE',
-          headers: {"Authorization": context.read<UserProvider>().accessToken},
-        ),
-      );
-      print(response);
-
-      if (response.data['message'] != "존재하지 않는 투두 번호입니다.") {
-        context.watch<TodoProvider>().remove(taskId);
-      }
-      print("hi");
-      //context.watch<TodoProvider>().setTodoList(todoList);
-    } catch (error) {
-      print(error);
-    }
-  }
-
-  Future<void> completeTodo(int taskId) async {
-    print("Complete Task:" + taskId.toString());
-
-    var dio = Dio();
-    print("AT:" + context.read<UserProvider>().accessToken);
-
-    try {
-      final response = await dio.request(
-        'http://43.200.184.84:8080/api/todo/complete?taskId=' +
-            taskId.toString(),
-        options: Options(
-          method: 'POST',
-          headers: {"Authorization": context.read<UserProvider>().accessToken},
-        ),
-      );
-      print(response);
-
-      context.read<TodoProvider>().toggleDone(taskId);
-
+      // context.read<ChallengeProvider>().add(Challenge(
+      //       title: response.data["title"],
+      //       content: response.data["content"],
+      //       day: response.data["day"],
+      //       off_day: response.data["off_day"],
+      //       start_date: response.data["start_date"],
+      //       //response.data["isFromChallenge"] == "true" ? true : false,
+      //       end_date: response.data["end_date"],
+      //       friends: response.data["friends"],
+      //     ));
       //context.watch<TodoProvider>().setTodoList(todoList);
     } catch (error) {
       print(error);
@@ -176,9 +102,16 @@ class _AddChallengeModalState extends State<AddChallengeModal> {
 
   @override
   Widget build(BuildContext context) {
-    DateTime date = DateTime(2016, 10, 26);
     // sDate = context.read<TodoProvider>().date;
     // getTodos(context.read<TodoProvider>().date);
+
+    void getDays(List<String> days) {
+      selectedDays.clear();
+      for (var day in days) {
+        selectedDays.add(day.toUpperCase());
+      }
+      print(selectedDays);
+    }
 
     void _showDialog(Widget child) {
       showCupertinoModalPopup<void>(
@@ -215,7 +148,7 @@ class _AddChallengeModalState extends State<AddChallengeModal> {
               Expanded(
                 flex: 2,
                 child: TextButton(
-                  onPressed: () => {Navigator.pop(context)},
+                  onPressed: () => {addChallenge(), Navigator.pop(context)},
                   child: Text(
                     '완료',
                     style: TextStyle(
@@ -238,7 +171,32 @@ class _AddChallengeModalState extends State<AddChallengeModal> {
                     color: Color.fromARGB(255, 113, 113, 113), fontSize: 20),
               ),
               TextField(
-                autofillHints: ["챌린지 이름"],
+                style: TextStyle(fontSize: 25),
+                //autofillHints: ["챌린지 이름"],
+                onChanged: (String value) {
+                  title = value;
+                  //print(title);
+                },
+              ),
+            ])),
+
+        // 챌린지 설명
+        Container(
+            padding: EdgeInsets.only(top: 40, left: 40, right: 40),
+            child:
+                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              Text(
+                "챌린지 설명",
+                style: TextStyle(
+                    color: Color.fromARGB(255, 113, 113, 113), fontSize: 20),
+              ),
+              TextField(
+                style: TextStyle(fontSize: 20),
+                //autofillHints: ["챌린지 이름"],
+                onChanged: (String value) {
+                  content = value;
+                  //print(content);
+                },
               ),
             ])),
 
@@ -255,7 +213,10 @@ class _AddChallengeModalState extends State<AddChallengeModal> {
                     color: Color.fromARGB(255, 113, 113, 113), fontSize: 20),
               ),
               SelectWeekDays(
-                onSelect: () => {},
+                onSelect: (values) {
+                  print(values);
+                  getDays(values);
+                },
                 days: _days,
                 boxDecoration: BoxDecoration(),
                 daysFillColor: Colors.blue,
@@ -285,12 +246,12 @@ class _AddChallengeModalState extends State<AddChallengeModal> {
                     // Display a CupertinoDatePicker in date picker mode.
                     onPressed: () => _showDialog(
                       CupertinoDatePicker(
-                        initialDateTime: date,
+                        initialDateTime: startDate,
                         mode: CupertinoDatePickerMode.date,
                         use24hFormat: true,
                         // This is called when the user changes the date.
                         onDateTimeChanged: (DateTime newDate) {
-                          setState(() => date = newDate);
+                          setState(() => startDate = newDate);
                         },
                       ),
                     ),
@@ -298,7 +259,7 @@ class _AddChallengeModalState extends State<AddChallengeModal> {
                     // use the intl package to format the value based on the
                     // user's locale settings.
                     child: Text(
-                      '${date.year}년 ${date.month}월 ${date.day}일',
+                      '${startDate.year}년 ${startDate.month}월 ${startDate.day}일',
                       style: const TextStyle(
                         fontSize: 22.0,
                       ),
@@ -332,12 +293,12 @@ class _AddChallengeModalState extends State<AddChallengeModal> {
                     // Display a CupertinoDatePicker in date picker mode.
                     onPressed: () => _showDialog(
                       CupertinoDatePicker(
-                        initialDateTime: date,
+                        initialDateTime: endDate,
                         mode: CupertinoDatePickerMode.date,
                         use24hFormat: true,
                         // This is called when the user changes the date.
                         onDateTimeChanged: (DateTime newDate) {
-                          setState(() => date = newDate);
+                          setState(() => endDate = newDate);
                         },
                       ),
                     ),
@@ -345,7 +306,7 @@ class _AddChallengeModalState extends State<AddChallengeModal> {
                     // use the intl package to format the value based on the
                     // user's locale settings.
                     child: Text(
-                      '${date.year}년 ${date.month}월 ${date.day}일',
+                      '${endDate.year}년 ${endDate.month}월 ${endDate.day}일',
                       style: const TextStyle(
                         fontSize: 22.0,
                       ),
@@ -356,6 +317,28 @@ class _AddChallengeModalState extends State<AddChallengeModal> {
               // TextField(
               //   autofillHints: ["챌린지 이름"],
               // ),
+            ],
+          ),
+        ),
+
+        // 함께할 친구
+        Container(
+          padding: EdgeInsets.only(top: 50, left: 40, right: 40),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                "함께할 친구",
+                style: TextStyle(
+                    color: Color.fromARGB(255, 113, 113, 113), fontSize: 20),
+              ),
+              IconButton(
+                  onPressed: () => {},
+                  icon: Icon(
+                    Icons.add_circle,
+                    color: Colors.blue,
+                    size: 40,
+                  )),
             ],
           ),
         ),

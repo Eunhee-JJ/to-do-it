@@ -30,8 +30,8 @@ class Todo {
   //final String userID;
   String date = DateFormat('yyyy-MM-dd').format(DateTime.now()); // JSON 파싱 해야함
   final String task;
-  late final bool complete;
-  late final bool isFromChallenge;
+  bool complete = false;
+  bool isFromChallenge = false;
   final String challenge;
 
   Todo(

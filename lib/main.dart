@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:todoit/providers/challenge_provider.dart';
 import 'package:todoit/providers/todo_provider.dart';
 import 'package:todoit/providers/user_provider.dart';
 import 'package:todoit/screens/login/login_screen.dart';
@@ -22,6 +23,7 @@ void main() {
     providers: [
       ChangeNotifierProvider(create: (_) => UserProvider()),
       ChangeNotifierProvider(create: (_) => TodoProvider()),
+      ChangeNotifierProvider(create: (_) => ChallengeProvider()),
     ],
     child: MyApp(),
   ));

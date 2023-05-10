@@ -15,7 +15,7 @@ class DayTodoModal extends StatefulWidget {
 }
 
 class _DayTodoModalState extends State<DayTodoModal> {
-  List<Todo> todoList = [
+  List<Todo> _todoList = [
     // Todo(1, DateTime.now(), 'Dummy1', false, false),
     // Todo(2, DateTime.now(), 'Dummy2', false, false),
   ];
@@ -63,6 +63,10 @@ class _DayTodoModalState extends State<DayTodoModal> {
               challenge: '',
             );
           }).toList());
+      _todoList = context.read<TodoProvider>().todoList;
+      // for (int i = 0; i < _todoList.length; i++) {
+      //   print(_todoList[i].task);
+      // }
       //context.read<TodoProvider>().setTodoList(todoList);
     } catch (error) {
       print(error);
@@ -85,7 +89,7 @@ class _DayTodoModalState extends State<DayTodoModal> {
       );
       print(response);
 
-      context.watch<TodoProvider>().add(Todo(
+      context.read<TodoProvider>().add(Todo(
             taskId: response.data["taskId"],
             task: response.data["task"],
             date: context.read<TodoProvider>().date,
@@ -129,6 +133,8 @@ class _DayTodoModalState extends State<DayTodoModal> {
   Future<void> completeTodo(int taskId) async {
     print("Complete Task:" + taskId.toString());
 
+    context.read<TodoProvider>().toggleDone(taskId);
+
     var dio = Dio();
     print("AT:" + context.read<UserProvider>().accessToken);
 
@@ -143,8 +149,6 @@ class _DayTodoModalState extends State<DayTodoModal> {
       );
       print(response);
 
-      context.read<TodoProvider>().toggleDone(taskId);
-
       //context.watch<TodoProvider>().setTodoList(todoList);
     } catch (error) {
       print(error);
@@ -153,122 +157,126 @@ class _DayTodoModalState extends State<DayTodoModal> {
 
   @override
   Widget build(BuildContext context) {
+    //print("modal");
     sDate = context.read<TodoProvider>().date;
-    getTodos(context.read<TodoProvider>().date);
+    // getTodos(context.read<TodoProvider>().date).then((value) => {});
+    // //_todoList = context.read<TodoProvider>().todoList;
+    // print(_todoList.length);
 
-    return AlertDialog(
-        content: Container(
-            width: 500,
-            height: 600,
-            child:
-                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              Expanded(
-                // 날짜
-                flex: 3,
-                child: Container(
-                  child: Text(sDate, style: TextStyle(fontSize: 25)),
-                  padding: EdgeInsets.all(15),
-                ),
-              ),
-              Expanded(
-                  // 투두 목록
-                  flex: 15,
-                  child: ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: context.read<TodoProvider>().todoList.length,
-                    itemBuilder: (context, int index) {
-                      //print("HI");
-                      //print(todoList);
-                      //getTodos(context.read<TodoProvider>().date);
-                      return Dismissible(
-                          onDismissed: (direction) {
-                            if (direction == DismissDirection.endToStart) {
-                              setState(() {
-                                deleteTodo(context
-                                    .watch<TodoProvider>()
-                                    .todoList[index]
-                                    .taskId);
-                                getTodos(context.read<TodoProvider>().date);
-                                print("index: ${index}");
-                              });
-                            }
-                          },
-                          key: Key(context
-                              .read<TodoProvider>()
-                              .todoList[index]
-                              .task),
+    return FutureBuilder(
+      future: getTodos(context.read<TodoProvider>().date),
+      builder: (context, snapshot) {
+        //if(snapshot.hasData){
+        return AlertDialog(
+            content: Container(
+                width: 500,
+                height: 600,
+                child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(
+                        // 날짜
+                        flex: 3,
+                        child: Container(
+                          child: Text(sDate, style: TextStyle(fontSize: 25)),
+                          padding: EdgeInsets.all(15),
+                        ),
+                      ),
+                      Expanded(
+                          // 투두 목록
+                          flex: 15,
+                          child: ListView.builder(
+                            shrinkWrap: true,
+                            itemCount: _todoList.length,
+                            itemBuilder: (context, int index) {
+                              //print("Elqk");
+                              //print("HI");
+                              //print(todoList);
+                              //getTodos(context.read<TodoProvider>().date);
+                              return Dismissible(
+                                  onDismissed: (direction) {
+                                    if (direction ==
+                                        DismissDirection.endToStart) {
+                                      setState(() {
+                                        deleteTodo(_todoList[index].taskId);
+                                        getTodos(
+                                            context.watch<TodoProvider>().date);
+                                        print("index: ${index}");
+                                      });
+                                    }
+                                  },
+                                  key: Key(context
+                                      .read<TodoProvider>()
+                                      .todoList[index]
+                                      .task),
+                                  child: Row(
+                                    children: [
+                                      SizedBox(
+                                        width: 5,
+                                      ),
+                                      Checkbox(
+                                        checkColor: Colors.white,
+                                        fillColor:
+                                            MaterialStateProperty.resolveWith(
+                                                getColor),
+                                        value: context
+                                            .read<TodoProvider>()
+                                            .todoList[index]
+                                            .complete,
+                                        onChanged: (bool? value) {
+                                          setState(() {
+                                            completeTodo(
+                                                _todoList[index].taskId);
+                                            // getTodos(context
+                                            //     .read<TodoProvider>()
+                                            //     .date);
+                                          });
+                                        },
+                                      ),
+                                      Text(_todoList[index].task),
+                                    ],
+                                  ));
+                            },
+                          )),
+                      Expanded(
+                          // Add 버튼
+                          flex: 3,
                           child: Row(
                             children: [
                               SizedBox(
-                                width: 5,
+                                width: 230,
                               ),
-                              Checkbox(
-                                checkColor: Colors.white,
-                                fillColor:
-                                    MaterialStateProperty.resolveWith(getColor),
-                                value: context
-                                    .read<TodoProvider>()
-                                    .todoList[index]
-                                    .complete,
-                                onChanged: (bool? value) {
-                                  setState(() {
-                                    completeTodo(context
-                                        .watch<TodoProvider>()
-                                        .todoList[index]
-                                        .taskId);
-                                  });
+                              FloatingActionButton(
+                                onPressed: () {
+                                  showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return AlertDialog(
+                                            title: Text("Add Todolist"),
+                                            content: TextField(
+                                              onChanged: (String value) {
+                                                input = value;
+                                              },
+                                            ),
+                                            actions: <Widget>[
+                                              TextButton(
+                                                  onPressed: () {
+                                                    setState(() {
+                                                      addTodo(input);
+                                                    });
+                                                    Navigator.pop(context);
+                                                  },
+                                                  child: Text("Add"))
+                                            ]);
+                                      });
                                 },
-                              ),
-                              Text(context
-                                  .read<TodoProvider>()
-                                  .todoList[index]
-                                  .task),
+                                child: Icon(Icons.add),
+                              )
                             ],
-                          ));
-                    },
-                  )),
-              Expanded(
-                  // Add 버튼
-                  flex: 3,
-                  child: Row(
-                    children: [
-                      SizedBox(
-                        width: 230,
-                      ),
-                      FloatingActionButton(
-                        onPressed: () {
-                          showDialog(
-                              context: context,
-                              builder: (BuildContext context) {
-                                return AlertDialog(
-                                    title: Text("Add Todolist"),
-                                    content: TextField(
-                                      onChanged: (String value) {
-                                        input = value;
-                                      },
-                                    ),
-                                    actions: <Widget>[
-                                      TextButton(
-                                          onPressed: () {
-                                            addTodo(input);
-                                            getTodos(context
-                                                .read<TodoProvider>()
-                                                .date);
-                                            //setState(() {
-                                            // todoList.add(
-                                            //   Todo(1, DateTime.now(), input,
-                                            //       false, false),
-                                            // );
-                                            //});
-                                          },
-                                          child: Text("Add"))
-                                    ]);
-                              });
-                        },
-                        child: Icon(Icons.add),
-                      )
-                    ],
-                  )),
-            ])));
+                          )),
+                    ])));
+        //}
+      },
+    );
   }
 }
