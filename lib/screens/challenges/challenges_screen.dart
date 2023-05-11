@@ -215,10 +215,12 @@ class _ChallengesScreenState extends State<ChallengesScreen> {
                                       PopupMenuItem<MenuType>(
                                         value: MenuType.second,
                                         child: Text('삭제'),
-                                        onTap: () {
+                                        onTap: () async {
+                                          await deleteChallenge(
+                                              challenges[index].title);
                                           setState(() {
-                                            deleteChallenge(
-                                                challenges[index].title);
+                                            // deleteChallenge(
+                                            //     challenges[index].title);
                                           });
                                           //context.watch<ChallengeProvider>().update();
                                         },

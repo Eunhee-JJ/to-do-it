@@ -5,6 +5,7 @@ import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:todoit/providers/challenge_provider.dart';
 import 'package:todoit/providers/todo_provider.dart';
 import 'package:todoit/providers/user_provider.dart';
+import 'package:todoit/screens/challenges/challenges_screen.dart';
 import 'package:todoit/screens/login/login_screen.dart';
 import 'package:todoit/screens/home_screen.dart';
 import 'package:todoit/screens/login/signup_screen.dart';
@@ -52,6 +53,7 @@ class MyApp extends StatelessWidget {
         '/home': (context) => CupertinoScaffold(body: HomeScreen()),
         '/login': (context) => CupertinoScaffold(body: LoginScreen()),
         '/signin': (context) => CupertinoScaffold(body: SigninScreen()),
+        '/challenge': (context) => CupertinoScaffold(body: ChallengesScreen()),
       },
     );
   }

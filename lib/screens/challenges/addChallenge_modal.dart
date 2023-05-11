@@ -9,6 +9,7 @@ import 'package:todoit/models/models.dart';
 import 'package:todoit/providers/challenge_provider.dart';
 import 'package:todoit/providers/todo_provider.dart';
 import 'package:todoit/providers/user_provider.dart';
+import 'package:todoit/screens/challenges/challenges_screen.dart';
 
 class AddChallengeModal extends StatefulWidget {
   const AddChallengeModal({super.key});
@@ -23,18 +24,6 @@ class _AddChallengeModalState extends State<AddChallengeModal> {
   List<String> selectedDays = [];
   DateTime startDate = DateTime.now();
   DateTime endDate = DateTime.now();
-
-  Color getColor(Set<MaterialState> states) {
-    const Set<MaterialState> interactiveStates = <MaterialState>{
-      MaterialState.pressed,
-      MaterialState.hovered,
-      MaterialState.focused,
-    };
-    if (states.any(interactiveStates.contains)) {
-      return Colors.blue;
-    }
-    return Colors.blue;
-  }
 
   Future<void> addChallenge() async {
     print("addChallenge:" + title);
@@ -148,7 +137,15 @@ class _AddChallengeModalState extends State<AddChallengeModal> {
               Expanded(
                 flex: 2,
                 child: TextButton(
-                  onPressed: () => {addChallenge(), Navigator.pop(context)},
+                  onPressed: () async {
+                    Navigator.pop(context);
+                    await addChallenge();
+                    Navigator.push(
+                        context,
+                        CupertinoPageRoute(
+                          builder: (context) => ChallengesScreen(),
+                        ));
+                  },
                   child: Text(
                     '완료',
                     style: TextStyle(
