@@ -133,7 +133,7 @@ class _DayTodoModalState extends State<DayTodoModal> {
   Future<void> completeTodo(int taskId) async {
     print("Complete Task:" + taskId.toString());
 
-    context.read<TodoProvider>().toggleDone(taskId);
+    // context.read<TodoProvider>().toggleDone(taskId);
 
     var dio = Dio();
     print("AT:" + context.read<UserProvider>().accessToken);
@@ -223,10 +223,24 @@ class _DayTodoModalState extends State<DayTodoModal> {
                                             .read<TodoProvider>()
                                             .todoList[index]
                                             .complete,
-                                        onChanged: (bool? value) {
+                                        onChanged: (bool? value) async {
+                                          await completeTodo(
+                                              _todoList[index].taskId);
+                                          // await new Future.delayed(
+                                          //     const Duration(seconds: 5));
+
+                                          // context
+                                          //     .read<TodoProvider>()
+                                          //     .toggleDone(
+                                          //         _todoList[index].taskId);
+
                                           setState(() {
-                                            completeTodo(
-                                                _todoList[index].taskId);
+                                            // completeTodo(
+                                            //     _todoList[index].taskId);
+
+                                            // _todoList[index].complete =
+                                            //     !_todoList[index].complete;
+
                                             // getTodos(context
                                             //     .read<TodoProvider>()
                                             //     .date);
