@@ -48,8 +48,8 @@ class _PersonalScreenState extends State<PersonalScreen> {
                 Expanded(
                     flex: 2,
                     child: CircleAvatar(
-                      backgroundImage:
-                          AssetImage(context.read<UserProvider>().profileImage),
+                      backgroundImage: NetworkImage(
+                          context.read<UserProvider>().profileImageUrl),
                       radius: 30,
                     )),
                 SizedBox(

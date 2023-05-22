@@ -1,8 +1,11 @@
 import 'package:intl/intl.dart';
 
-class Friends {
-  String nickname = '';
+class Friend {
+  String name = '';
+  String userId = '';
   String phone = '';
+
+  Friend({required this.name, required this.userId, required this.phone});
 }
 
 class Challenge {
@@ -12,7 +15,7 @@ class Challenge {
   List<String> off_day = [];
   String start_date = '';
   String end_date = '';
-  List<Friends> friends = [];
+  List<Friend> friends = [];
 
   Challenge(
       {required this.title,
@@ -50,7 +53,7 @@ class MyUser {
   String phone;
   String social;
   String nickname;
-  String profileImg; // DB에 없네..?
+  String profileImageUrl; // DB에 없네..?
   String accessToken;
   String refreshToken;
 
@@ -60,7 +63,7 @@ class MyUser {
       required this.phone,
       required this.social,
       required this.nickname,
-      required this.profileImg,
+      required this.profileImageUrl,
       required this.accessToken,
       required this.refreshToken});
 }

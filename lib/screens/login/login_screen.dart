@@ -78,6 +78,10 @@ class _LoginScreenState extends State<LoginScreen> {
             '\n이메일: ${user.kakaoAccount?.email}');
         kakaoNickname = user.kakaoAccount?.profile?.nickname;
         kakaoEmail = user.kakaoAccount?.email;
+        print(user.kakaoAccount?.profile?.profileImageUrl);
+        context
+            .read<UserProvider>()
+            .setProfileImg(user.kakaoAccount?.profile?.profileImageUrl);
       } catch (error) {
         print('사용자 정보 요청 실패 $error');
       }

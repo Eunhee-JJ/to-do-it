@@ -8,7 +8,7 @@ class UserProvider extends ChangeNotifier {
       phone: '',
       social: '',
       nickname: '',
-      profileImg: '',
+      profileImageUrl: '',
       accessToken: '',
       refreshToken: '');
 
@@ -18,7 +18,7 @@ class UserProvider extends ChangeNotifier {
   String get phone => _user.phone;
   String get social => _user.social;
   String get nickname => _user.nickname;
-  String get profileImage => _user.profileImg;
+  String get profileImageUrl => _user.profileImageUrl;
   String get accessToken => _user.accessToken;
   String get refreshToken => _user.refreshToken;
 
@@ -52,8 +52,8 @@ class UserProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  set profileImg(String profileImg) {
-    _user.profileImg = profileImg;
+  void setProfileImg(String? profileImageUrl) {
+    _user.profileImageUrl = profileImageUrl!;
     notifyListeners();
   }
 
