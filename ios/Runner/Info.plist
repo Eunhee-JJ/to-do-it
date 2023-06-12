@@ -31,7 +31,7 @@
 			<string></string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>kakao7e83021145d33eb03992d460963a2026</string>
+				<string>kakao7aeec4d4d11ac84983c56eb24b78f6ef</string>
 			</array>
 		</dict>
 	</array>
@@ -44,6 +44,8 @@
 	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSContactsUsageDescription</key>
+	<string>Reason we need access to the contact list</string>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<key>UILaunchStoryboardName</key>
@@ -67,7 +69,5 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
-	<key>NSContactsUsageDescription</key>
-    <string>Reason we need access to the contact list</string>
 </dict>
 </plist>

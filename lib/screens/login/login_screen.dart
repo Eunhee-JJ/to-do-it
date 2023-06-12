@@ -20,6 +20,16 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  MyUser myUser = MyUser(
+    userID: '',
+    email: '',
+    phone: '',
+    social: '',
+    nickname: '',
+    profileImageUrl: '',
+    accessToken: '',
+    refreshToken: '',
+  );
   /* ==================== 로그인 상태 유지 ==================== */
   final storage = new FlutterSecureStorage();
   dynamic userInfo = '';
@@ -82,8 +92,17 @@ class _LoginScreenState extends State<LoginScreen> {
         context
             .read<UserProvider>()
             .setProfileImg(user.kakaoAccount?.profile?.profileImageUrl);
+
+        myUser.userID = user.id.toString();
+        myUser.email = user.kakaoAccount?.email ?? '';
+        myUser.phone = user.kakaoAccount?.phoneNumber ?? '';
+        myUser.nickname = user.kakaoAccount?.profile?.nickname ?? '';
+        myUser.profileImageUrl =
+            user.kakaoAccount?.profile?.profileImageUrl ?? '';
+        print("ok");
       } catch (error) {
         print('사용자 정보 요청 실패 $error');
+        return;
       }
       final profileInfo = json.decode(response.body); // Dio
       print('카톡 로그인 성공 ${token.accessToken}');
@@ -143,9 +162,10 @@ class _LoginScreenState extends State<LoginScreen> {
           //직렬화를 이용하여 데이터를 입출력하기 위해 model.dart에 Login 정의 참고
           //var val = json.decode(json.encode(context.read<UserProvider>().user));
 
+          myUser.accessToken = ourAccesToken;
           await storage.write(
             key: 'login',
-            value: ourAccesToken,
+            value: jsonEncode(myUser),
           );
           print('기가입자 로그인 성공!');
           print("서비스 액세스 토큰: " + context.read<UserProvider>().accessToken);

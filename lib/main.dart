@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:todoit/providers/challenge_provider.dart';
+import 'package:todoit/providers/friend_provider.dart';
 import 'package:todoit/providers/todo_provider.dart';
 import 'package:todoit/providers/user_provider.dart';
 import 'package:todoit/screens/challenges/challenges_screen.dart';
@@ -17,7 +18,7 @@ void main() {
 
   // runApp() 호출 전 Flutter SDK 초기화
   KakaoSdk.init(
-    nativeAppKey: '7e83021145d33eb03992d460963a2026',
+    nativeAppKey: '7aeec4d4d11ac84983c56eb24b78f6ef',
     // javaScriptAppKey: '${YOUR_JAVASCRIPT_APP_KEY}',
   );
   runApp(MultiProvider(
@@ -25,6 +26,7 @@ void main() {
       ChangeNotifierProvider(create: (_) => UserProvider()),
       ChangeNotifierProvider(create: (_) => TodoProvider()),
       ChangeNotifierProvider(create: (_) => ChallengeProvider()),
+      ChangeNotifierProvider(create: (_) => FriendProvider()),
     ],
     child: MyApp(),
   ));

@@ -66,4 +66,15 @@ class MyUser {
       required this.profileImageUrl,
       required this.accessToken,
       required this.refreshToken});
+
+  Map<String, dynamic> toJson() => {
+        'userID': userID,
+        'email': email,
+        'phone': phone,
+        'social': social,
+        'nickname': nickname,
+        'profileImageUrl': profileImageUrl,
+        'accessToken': accessToken,
+        'refreshToken': refreshToken,
+      };
 }

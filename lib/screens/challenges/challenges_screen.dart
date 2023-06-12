@@ -44,10 +44,8 @@ class _ChallengesScreenState extends State<ChallengesScreen> {
   MenuType? selectedMenu;
 
   Future<void> getChallenge() async {
-    print("getChallenge");
-
     var dio = Dio();
-    print("AT:" + context.read<UserProvider>().accessToken);
+    //print("AT:" + context.read<UserProvider>().accessToken);
 
     try {
       final response = await dio.request(
@@ -58,7 +56,7 @@ class _ChallengesScreenState extends State<ChallengesScreen> {
         ),
         //data: {title, content, selectedDays, [], startDate, endDate, []}
       );
-      print(response);
+      print("getChallenge" + response.toString());
 
       if (response.data['httpStatus'] == "OK") {
         context.read<ChallengeProvider>().setChallengeList(
