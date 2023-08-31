@@ -23,7 +23,7 @@ class _AcceptListState extends State<AcceptList> {
 
     try {
       final response = await dio.request(
-        'http://43.200.184.84:8080/api/friend',
+        'http://43.200.184.84:8080/api/friend/accept',
         options: Options(
           method: 'GET',
           headers: {"Authorization": context.read<UserProvider>().accessToken},
@@ -34,7 +34,7 @@ class _AcceptListState extends State<AcceptList> {
           ((response.data["friend_list"]).map<Friend>((json) {
         return Friend(
           name: json["nickname"],
-          userId: json["userId"],
+          userId: json["userId"].toString(),
           phone: json["phone"],
         );
       }).toList());
